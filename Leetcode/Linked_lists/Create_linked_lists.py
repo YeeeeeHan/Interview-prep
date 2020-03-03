@@ -5,18 +5,18 @@ class Node:
 
 class linked_list:
 	def __init__(self):
-		self.head = Node()
+		self.head = None
 
 # Adds new node containing 'data' to the end of the linked list.
 	def append(self,data):
-		if self.head.val is None:
-			self.head.val = data
+		newNode = Node(data)
+		if self.head is None:
+			self.head = Node(data)
 		else:
-			temp = Node(data)
-			cur = self.head
-			while cur.next is not None:
-				cur = cur.next
-			cur.next = temp
+			last_node = self.head
+			while last_node.next is not None:
+				last_node = last_node.next
+			last_node.next = newNode
 
 
 	def arrayToLinkedList(self,arr):
@@ -70,14 +70,70 @@ class linked_list:
 				return
 			cur_idx += 1
 
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+def Print_dep_unsorted_linkedlist_hash(head): # O(N)
+	duplicates = []
+	hash = {}
+	ptr = head
+	while (ptr is not None):
+		if hash.get(ptr.val, False):
+			duplicates.append(ptr.val)
+		else:
+			hash[ptr.val] = 1
+		ptr = ptr.next
+	print(duplicates)
+
+
+def Print_dep_unsorted_linkedlist_2pointer(head):
+	duplicates = set()
+	current = head
+	while current is not None:
+		runner = current
+		while runner.next is not None:			# work with temp.next, so that can do temp.next.next
+			if runner.next.val == current.val:
+				duplicates.add(runner.next.val)
+			runner = runner.next
+		current = current.next
+	print(duplicates)
+
+
+
+# Does not work for 0,0,1,1,1,2,2,3,3,4
+def Remove_dup_unsorted_linkedlist_2pointer(head): # O(N*N)
+	current = head
+	while current is not None:
+		print(f"current.val: {current.val}")
+		runner = current
+		while runner.next is not None:			# work with temp.next, so that can do temp.next.next
+			print(f"runner: {runner.val}")
+			if runner.next.val == current.val:
+				print(f"found: {current.val}")
+				if runner.next.next is not None:
+					runner.next = runner.next.next
+				else:
+					runner.next = None
+					break
+			runner = runner.next
+		current = current.next
+
+
+def Remove_sorted_linkedlist_2pointer(head):
+	current = head
+	while head is not None:
+		print(f"head.val:{head.val}")
+
+		head = head.next
 
 
 
 
 if __name__ == '__main__':
-	arr = [1, 2, 3, 4, 5, 6]
+	arr = [0,0,1,1,1,2,2,3,3,4]
 	root = linked_list()
 	root.arrayToLinkedList(arr)
+	root.printLinkedList()
+	Remove_dup_unsorted_linkedlist_2pointer(root.head)
 	root.printLinkedList()
 
 
